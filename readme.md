@@ -42,8 +42,7 @@ This project offers a tool for highlighting and annotating sentences in PDF docu
     ```
 
 4. Set up environment variables:
-    - Create a `.env` file in the root directory.
-    - Add your OpenAI API key and LLM model details:
+    - Add your OpenAI API key and/or LLM model details to the `.env` file:
         ```
         OPENAI_API_KEY=your_openai_api_key
         LLM_MODEL=your_llm_model
