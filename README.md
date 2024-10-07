@@ -138,7 +138,11 @@ A Streamlit example is provided in `example_streamlit_app.py` to demonstrate how
 ### Running the Streamlit App
 
 1. Ensure you have installed the required packages and set up the environment variables as described in the Installation section.
-2. Run the Streamlit app:
+2. Install streamlit:
+    ```sh
+    pip install streamlit
+    ```
+3. Run the Streamlit app:
     ```sh
     streamlit run example_streamlit_app.py
     ```
