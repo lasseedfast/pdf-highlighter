@@ -174,6 +174,10 @@ A Streamlit example is provided in `example_streamlit_app.py` to demonstrate how
 
 **Note:** The `num_ctx` parameter is set to 20000 by default, which may not be sufficient for all use cases. Adjust this value based on your specific requirements.
 
+## Default Prompts
+
+The default LLM prompts are stored in the [`prompts.yaml`](prompts.yaml) file. You can view and edit the prompts directly in this file.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.

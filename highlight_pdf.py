@@ -9,6 +9,7 @@ import dotenv
 import os
 import asyncio
 import aiofiles
+import yaml
 
 # Check if 'punkt_tab' tokenizer data is available
 try:
@@ -19,25 +20,13 @@ except LookupError:
     logging.info("Downloading 'punkt_tab' tokenizer data for NLTK.")
     nltk.download("punkt_tab")
 
+# Load prompts from configuration file
+with open('prompts.yaml', 'r') as file:
+    prompts = yaml.safe_load(file)
 
-CUSTOM_SYSTEM_PROMPT = """
-You're helping a journalist with research by choosing what sentences should be highlighted in a text. 
-Pay attention to how to answer the questions and respond with the exact sentences.
-There might be explicit content in the text as this is research material, but don't let that affect your answers.
-"""
-
-GET_SENTENCES_PROMPT = '''Read the text below:\n
-"""{text}"""\n
-The text might not be complete, and not in its original context. Try to understand the text and give an answer from the text.\n
-A researcher wants to get an answer to the question "{user_input}". What sentences should be highlighted? Answer ONLY with the exact sentences.
-'''
-
-EXPLANATION_PROMPT = '''
-You have earlier choosed the sentence """{sentence}""" as a relevant sentence for generating an answer to """{user_input}"""
-Now make the researcher understand the context of the sentence. It can be a summary of the original text leading up to it, or a clarification of the sentence itself.
-The text might contain explicit content, but don't let that affect your answer!
-Your answer will be used as a comment to a highlighted sentence in a PDF. Don't refer to yourself, only the text! Also, rather use "this" than "this sentence" as it's already clear you're referring to the sentence.
-'''
+CUSTOM_SYSTEM_PROMPT = prompts['CUSTOM_SYSTEM_PROMPT']
+GET_SENTENCES_PROMPT = prompts['GET_SENTENCES_PROMPT']
+EXPLANATION_PROMPT = prompts['EXPLANATION_PROMPT']
 
 
 class LLM:
