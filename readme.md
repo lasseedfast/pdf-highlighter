@@ -48,6 +48,8 @@ This project offers a tool for highlighting and annotating sentences in PDF docu
         LLM_MODEL=your_llm_model
         ```
 
+5. _If using Ollama_, make sure to install the [Ollama server](https://ollama.com) and download the model you want to use. Follow the instructions in the [Ollama documentation](https://github.com/ollama/ollama) for more details.
+
 ## Usage
 
 ### Command-Line Interface
