@@ -20,8 +20,14 @@ except LookupError:
     logging.info("Downloading 'punkt_tab' tokenizer data for NLTK.")
     nltk.download("punkt_tab")
 
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the absolute path to the prompts.yaml file
+prompts_path = os.path.join(script_dir, 'prompts.yaml')
+
 # Load prompts from configuration file
-with open('prompts.yaml', 'r') as file:
+with open(prompts_path, 'r') as file:
     prompts = yaml.safe_load(file)
 
 CUSTOM_SYSTEM_PROMPT = prompts['CUSTOM_SYSTEM_PROMPT']
