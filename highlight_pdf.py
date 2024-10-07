@@ -46,8 +46,8 @@ class LLM:
 
     Attributes:
         model (str): The model to be used for generating responses.
+        num_ctx (int): The number of context tokens to be used. Defaults to 20000.
         temperature (float): The temperature setting for the model's response generation.
-        num_ctx (int): The number of context tokens to be used.
         keep_alive (int): The keep-alive duration for the connection.
         options (dict): Options for the model's response generation.
         memory (bool): Whether to retain conversation history.
@@ -70,11 +70,11 @@ class LLM:
 
     def __init__(
         self,
+        num_ctx=20000,
         openai_key=False,
         model=None,
         temperature=0,
         system_prompt=None,
-        num_ctx=None,
         memory=True,
         keep_alive=3600,
     ):
@@ -86,7 +86,7 @@ class LLM:
         model (str, optional): The model to be used. Defaults to None.
         temperature (float, optional): Sampling temperature for the model. Defaults to 0.
         system_prompt (str, optional): Initial system prompt for the model. Defaults to None.
-        num_ctx (int, optional): Number of context tokens. Defaults to None.
+        context_window (int, optional): Number of context tokens. Defaults to None.
         memory (bool, optional): Whether to use memory. Defaults to True.
         keep_alive (int, optional): Keep-alive duration in seconds. Defaults to 3600.
         """
@@ -96,12 +96,9 @@ class LLM:
         else:
             self.model = os.getenv("LLM_MODEL")
         self.temperature = temperature
-        self.num_ctx = num_ctx
         self.keep_alive = keep_alive
-        self.options = {"temperature": self.temperature}
+        self.options = {"temperature": self.temperature, num_ctx: num_ctx}
         self.memory = memory
-        if self.num_ctx:
-            self.options["num_ctx"] = self.num_ctx
         if system_prompt:
             self.messages = [{"role": "system", "content": system_prompt}]
         else:

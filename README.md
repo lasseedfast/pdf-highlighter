@@ -167,10 +167,12 @@ A Streamlit example is provided in `example_streamlit_app.py` to demonstrate how
 
 #### Methods
 
-- `__init__(self, openai_key=False, model=None, temperature=0, system_prompt=None, num_ctx=None, memory=True, keep_alive=3600)`: Initializes the LLM class with the provided parameters.
+- `__init__(self, openai_key=False, model=None, temperature=0, system_prompt=None, num_ctx=None, memory=True, keep_alive=3600)`: Initializes the LLM class with the provided parameters. 
 - `use_openai(self, key, model)`: Configures the class to use OpenAI for generating responses.
 - `use_ollama(self, model)`: Configures the class to use Ollama for generating responses.
 - `async generate(self, prompt)`: Asynchronously generates a response based on the provided prompt.
+
+**Note:** The `num_ctx` parameter is set to 20000 by default, which may not be sufficient for all use cases. Adjust this value based on your specific requirements.
 
 ## Contributing
 
