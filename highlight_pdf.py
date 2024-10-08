@@ -256,18 +256,22 @@ class Highlighter:
 
     async def highlight(
         self,
-        user_input,
+        user_input=None,
         docs=None,
         data=None,
         pdf_filename=None,
+        pages=None,
+        zero_indexed_pages=False,
     ):
         """
         Highlights text in one or more PDF documents based on user input.
         Args:
-            user_input (str): The text input from the user to highlight in the PDFs.
+            user_input (str): The text input from the user to highlight in the PDFs. Defaults to None.
             docs (list, optional): A list of PDF filenames to process. Defaults to None.
-            data (dict, optional): Data in JSON format to process. Should be on the format: {"pdf_filename": "filename", "pages": [1, 2, 3]}. Defaults to None.
+            data (list, optional): Data in JSON format to process. Should be on the format: [{"user_input": "text", "pdf_filename": "filename", "pages": [1, 2, 3]}]. Defaults to None.
             pdf_filename (str, optional): A single PDF filename to process. Defaults to None.
+            pages (list, optional): A list of page numbers to process. Defaults to None.
+            zero_indexed_pages (bool, optional): Flag to indicate if the page numbers are zero-indexed. Defaults to False.
         Returns:
             io.BytesIO: A buffer containing the combined PDF with highlights.
         Raises:
@@ -279,14 +283,21 @@ class Highlighter:
         ), "You need to provide either a PDF filename, a list of filenames or data in JSON format."
 
         if data:
+            user_input = [item["user_input"] for item in data]
             docs = [item["pdf_filename"] for item in data]
+            pages = [item.get("pages") for item in data]
+            if not zero_indexed_pages:
+                pages = [[p - 1 for p in page] for page in pages]
+
 
         if not docs:
+            user_input = [user_input]
             docs = [pdf_filename]
+            pages = [pages]
 
         tasks = [
-            self.annotate_pdf(user_input, doc, pages=item.get("pages"))
-            for doc, item in zip(docs, data or [{}] * len(docs))
+            self.annotate_pdf(ui, doc, pages=pg)
+            for ui, doc, pg in zip(user_input, docs, pages or [pages] * len(docs))
         ]
         pdf_buffers = await asyncio.gather(*tasks)
 
@@ -309,6 +320,7 @@ class Highlighter:
         return pdf_buffer
 
     async def get_sentences_with_llm(self, text, user_input):
+        print(text)
         prompt = GET_SENTENCES_PROMPT.format(text=text, user_input=user_input)
 
         answer = await self.llm.generate(prompt)
@@ -425,7 +437,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--user_input",
         type=str,
-        required=True,
         help="The text input from the user to highlight in the PDFs.",
     )
     parser.add_argument("--pdf_filename", type=str, help="The PDF filename to process.")
@@ -461,7 +472,18 @@ if __name__ == "__main__":
             data=args.data,
         )
         # Save the highlighted PDF to a new file
-        filename = args.pdf_filename.replace(".pdf", "_highlighted.pdf")
+        if not args.pdf_filename:
+            # If no specific PDF filename is provided
+            if args.data and len(args.data) == 1:
+                # If data is provided and contains exactly one item, use its filename
+                filename = args.data[0]["pdf_filename"].replace(".pdf", "_highlighted.pdf")
+            else:
+                # If no specific filename and data contains multiple items, generate a timestamped filename
+                from datetime import datetime
+                filename = f"highlighted_pdf_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+        else:
+            # If a specific PDF filename is provided, append '_highlighted' to its name
+            filename = args.pdf_filename.replace(".pdf", "_highlighted.pdf")
         await save_pdf_to_file(
             highlighted_pdf, filename
         )
