@@ -58,10 +58,6 @@ A library for highlighting and annotating sentences in PDF documents using Large
 
 You can use the command-line interface to highlight sentences in a PDF document.
 
-```sh
-python highlight_pdf.py --user_input "Your question or input text" --pdf_filename "path/to/your/document.pdf" --openai_key "your_openai_api_key" --comment
-```
-
 #### Arguments
 
 - `--user_input`: The text input from the user to highlight in the PDFs.
@@ -69,7 +65,8 @@ python highlight_pdf.py --user_input "Your question or input text" --pdf_filenam
 - `--silent`: Suppress warnings (optional).
 - `--openai_key`: OpenAI API key (optional if set in `.env`).
 - `--comment`: Include comments in the highlighted PDF (optional).
-- `--data`: Data in JSON format (fields: text, pdf_filename, pages) (optional).
+- `--data`: Data in JSON format (fields: user_input, pdf_filename, pages) (optional).
+- `--llm_model`: The LLM model to use (optional if set in `.env`).
 
 #### Example
 
