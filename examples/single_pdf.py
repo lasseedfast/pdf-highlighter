@@ -2,12 +2,6 @@ import asyncio
 import io
 from highlight_pdf import Highlighter
 
-# User input/question
-user_input = "What are the main findings?"
-
-# Answer received from LLM based on text in a PDF
-llm_answer = "The main findings are that the treatment was effective in 70% of cases."
-
 # PDF filename
 pdf_filename = "example_pdf_document.pdf"
 
@@ -23,8 +17,8 @@ highlighter = Highlighter(
 # Define the main asynchronous function to highlight the PDF
 async def main():
     highlighted_pdf_buffer = await highlighter.highlight(
-        user_input=user_input,
-        data=[{"text": llm_answer, "pdf_filename": pdf_filename, "pages": pages}]
+        user_input=input('User input: '),
+        pdf_filename=pdf_filename,
     )
     
     # Save the highlighted PDF to a new file
