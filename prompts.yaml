@@ -7,7 +7,7 @@ GET_SENTENCES_PROMPT: |
   Read the text below:\n
   """{text}"""\n
   The text might not be complete, and not in its original context. Try to understand the text and give an answer from the text.\n
-  A researcher wants to get an answer to the question "{user_input}". What sentences should be highlighted? Answer ONLY with the exact sentences.
+  A researcher wants to get an answer to the question "{user_input}". What sentences should be highlighted? Answer ONLY with the exact sentences. Make sure to answer with all relevant sentences, even if it's a long text.
 
 EXPLANATION_PROMPT: |
   You have earlier choosed the sentence """{sentence}""" as a relevant sentence for generating an answer to """{user_input}"""
