@@ -1,6 +1,6 @@
 # PDF Highlighter
 
-This project offers a tool for highlighting and annotating sentences in PDF documents using a Large Language Model (LLM). It is designed to help users identify and emphasize relevant sentences in their documents.
+A library for highlighting and annotating sentences in PDF documents using Large Language Models (LLM). It's made to help users identify and emphasize relevant sentences in PDF documents. Compatible with both OpenAI and Ollama libraries.
 
 ## Use cases
 
@@ -16,11 +16,12 @@ This project offers a tool for highlighting and annotating sentences in PDF docu
 - Optionally add comments to highlighted sentences.
 - Supports both OpenAI and Ollama language models.
 - Combine multiple PDFs into a single document with highlights and comments.
+- Classes and methods are asynchronous, allowing for non-blocking operations.
 
 ## Requirements
 
 - Python 3.7+ (tested with 3.10.13)
-- Required Python packages (see `requirements.txt`)
+- Required Python packages (see [`requirements.txt`](requirements.txt))
 
 ## Installation
 
@@ -47,6 +48,7 @@ This project offers a tool for highlighting and annotating sentences in PDF docu
         OPENAI_API_KEY=your_openai_api_key
         LLM_MODEL=your_llm_model
         ```
+        You can also set the LLM model name when initializing the `LLM` or `Highlighter` class using the `model` parameter.
 
 5. _If using Ollama_, make sure to install the [Ollama server](https://ollama.com) and download the model you want to use. Follow the instructions in the [Ollama documentation](https://github.com/ollama/ollama) for more details.
 
@@ -72,17 +74,17 @@ python highlight_pdf.py --user_input "Your question or input text" --pdf_filenam
 #### Example
 
 ```sh
-python highlight_pdf.py --user_input "What are the main findings?" --pdf_filename "research_paper.pdf" --openai_key "sk-..." --comment
+python highlight_pdf.py --user_input "What is said about climate?" --pdf_filename "example_pdf_document.pdf" --comment --llm_model llama3.1
 ```
 
 ### Note on Long PDFs
 
 If the PDF is long, the result will be better if the user provides the data containing filename, user_input, and pages. This helps the tool focus on specific parts of the document, improving the accuracy and relevance of the highlights.
 
-#### Example with Data
+#### Example using the data argument
 
 ```sh
-python highlight_pdf.py --data '[{"text": "Some text to highlight", "pdf_filename": "example.pdf", "pages": [1, 2, 3]}]'
+python highlight_pdf.py --data '[{"user_input": "What is said about climate?", "pdf_filename": "example_pdf_document.pdf", "pages": [1, 2]}]'
 ```
 
 #### Output
@@ -91,45 +93,12 @@ The highlighted PDF will be saved with `_highlighted` appended to the original f
 
 ### Use in Python Code
 
-Here's a short Python code example demonstrating how to use the highlight tool to understand what exact text in the PDF is relevant for the original user input/question. This example assumes that the user has previously received an answer from an LLM based on text in a PDF.
+This [example](examples/single_pdf.py) demonstrates how to use the highlight tool to understand what text in the PDF is relevant for the original user input/question. 
 
-```python
-import asyncio
-import io
-from highlight_pdf import Highlighter
+### Use in Python Code with ChromaDB
+If the user has previously used ChromaDB to query for relevant texts, they can use the tool to highlight the relevant text in the PDFs based on the user input/question.  
+This [example](examples/data_from_chromadb.py) assumes that there is a ChromaDB instance with information, and that the filenames and pages where the text is found are stored as metadata in ChromaDB.
 
-# User input/question
-user_input = "What are the main findings?"
-
-# Answer received from LLM based on text in a PDF
-llm_answer = "The main findings are that the treatment was effective in 70% of cases."
-
-# PDF filename
-pdf_filename = "research_paper.pdf"
-
-# Pages to consider (optional, can be None)
-pages = [1, 2, 3]
-
-# Initialize the Highlighter
-highlighter = Highlighter(
-    openai_key="your_openai_api_key",
-    comment=True  # Enable comments to understand the context
-)
-
-# Define the main asynchronous function to highlight the PDF
-async def main():
-    highlighted_pdf_buffer = await highlighter.highlight(
-        user_input=user_input,
-        data=[{"text": llm_answer, "pdf_filename": pdf_filename, "pages": pages}]
-    )
-    
-    # Save the highlighted PDF to a new file
-    with open("highlighted_research_paper.pdf", "wb") as f:
-        f.write(highlighted_pdf_buffer.getbuffer())
-
-# Run the main function using asyncio
-asyncio.run(main())
-```
 
 ## Streamlit Example
 
