@@ -1,5 +1,4 @@
 import asyncio
-import io
 from highlight_pdf import Highlighter
 
 # PDF filename
@@ -16,7 +15,7 @@ highlighter = Highlighter(
 # Define the main asynchronous function to highlight the PDF
 async def main():
     highlighted_pdf_buffer = await highlighter.highlight(
-        user_input=input('User input: '),
+        user_input=input('User input: '), # e.g. what is said about climate?
         pdf_filename=pdf_filename,
     )
     

@@ -262,6 +262,7 @@ class Highlighter:
         pdf_filename=None,
         pages=None,
         zero_indexed_pages=False,
+        pdf_buffer=None
     ):
         """
         Highlights text in one or more PDF documents based on user input.
@@ -272,6 +273,7 @@ class Highlighter:
             pdf_filename (str, optional): A single PDF filename to process. Defaults to None.
             pages (list, optional): A list of page numbers to process. Defaults to None.
             zero_indexed_pages (bool, optional): Flag to indicate if the page numbers are zero-indexed. Defaults to False.
+            pdf_buffer (io.BytesIO, optional): A buffer containing the PDF that should be highlighted. #! 
         Returns:
             io.BytesIO: A buffer containing the combined PDF with highlights.
         Raises:
@@ -279,7 +281,7 @@ class Highlighter:
         """
         pdf_buffers = []
         assert any(
-            [data, pdf_filename, docs]
+            [data, pdf_filename, docs, pdf_buffer]
         ), "You need to provide either a PDF filename, a list of filenames or data in JSON format."
 
         if data:
@@ -290,9 +292,9 @@ class Highlighter:
                 pages = [[p - 1 for p in page] for page in pages]
 
 
-        if not docs:
+        if not docs and any([pdf_filename, pdf_buffer]):
             user_input = [user_input]
-            docs = [pdf_filename]
+            docs = [pdf_filename if pdf_filename else pdf_buffer]
             pages = [pages]
 
         tasks = [
@@ -328,17 +330,16 @@ class Highlighter:
     async def annotate_pdf(
         self,
         user_input: str,
-        filename: str,
+        pdf_file: str,
         pages: list = None,
         extend_pages: bool = False,
     ):
         self.llm = LLM(**self.llm_params)
 
-        #! Fix this
-        if not isinstance(filename, io.BytesIO):
-            pdf = pymupdf.open(filename)
+        if not isinstance(pdf_file, io.BytesIO):
+            pdf = pymupdf.open(pdf_file)
         else:
-            pdf = pymupdf.open(stream=filename, filetype="pdf")
+            pdf = pymupdf.open(stream=pdf_file, filetype="pdf")
         output_pdf = pymupdf.open()
         vectorizer = TfidfVectorizer()
 
