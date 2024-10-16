@@ -10,7 +10,6 @@ pages = [1, 2]
 
 # Initialize the Highlighter
 highlighter = Highlighter(
-    model='llama3.1',
     comment=True  # Enable comments to understand the context
 )
 

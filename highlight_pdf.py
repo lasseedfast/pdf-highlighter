@@ -320,7 +320,6 @@ class Highlighter:
         return pdf_buffer
 
     async def get_sentences_with_llm(self, text, user_input):
-        print(text)
         prompt = GET_SENTENCES_PROMPT.format(text=text, user_input=user_input)
 
         answer = await self.llm.generate(prompt)
