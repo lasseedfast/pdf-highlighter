@@ -7,7 +7,7 @@ import base64
 async def highlight_pdf(user_input, pdf_file, make_comments):
     highlighter = Highlighter(comment=make_comments)
     pdf_buffer = io.BytesIO(pdf_file.read())
-    highlighted_pdf_buffer = await highlighter.highlight(user_input, pdf_buffer=pdf_buffer)
+    highlighted_pdf_buffer = await highlighter.highlight(user_input, pdf_filename=pdf_buffer)
     return highlighted_pdf_buffer
 
 def main():

@@ -334,7 +334,11 @@ class Highlighter:
     ):
         self.llm = LLM(**self.llm_params)
 
-        pdf = pymupdf.open(filename)
+        #! Fix this
+        if not isinstance(filename, io.BytesIO):
+            pdf = pymupdf.open(filename)
+        else:
+            pdf = pymupdf.open(stream=filename, filetype="pdf")
         output_pdf = pymupdf.open()
         vectorizer = TfidfVectorizer()
 
