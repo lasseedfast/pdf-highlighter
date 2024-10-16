@@ -1,1 +1,1 @@
-from highlight_pdf import Highlighter
+from .highlight_pdf import Highlighter
