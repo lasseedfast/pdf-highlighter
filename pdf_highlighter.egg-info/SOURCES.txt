@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.py
+examples/__init__.py
+examples/data_from_chromadb.py
+examples/example_streamlit_app.py
+examples/single_pdf.py
+highlight_pdf/__init__.py
+highlight_pdf/highlight_pdf.py
+pdf_highlighter.egg-info/PKG-INFO
+pdf_highlighter.egg-info/SOURCES.txt
+pdf_highlighter.egg-info/dependency_links.txt
+pdf_highlighter.egg-info/requires.txt
+pdf_highlighter.egg-info/top_level.txt

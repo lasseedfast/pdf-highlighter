@@ -4,6 +4,7 @@ setup(
     name='pdf-highlighter',
     version='0.1.0',
     packages=find_packages(),
+    data_files=['prompts.yaml']
     install_requires=[
         'pymupdf',
         'nltk',

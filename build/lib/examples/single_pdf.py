@@ -1,5 +1,5 @@
 import asyncio
-from highlight_pdf.highlight_pdf import Highlighter
+from highlight_pdf import Highlighter
 
 # PDF filename
 pdf_filename = "example_pdf_document.pdf"

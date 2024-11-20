@@ -1,0 +1,6 @@
+pymupdf
+nltk
+scikit-learn
+python-dotenv
+aiofiles
+pyyaml
